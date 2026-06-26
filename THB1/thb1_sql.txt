@@ -1,0 +1,11 @@
+Bai2
+c. SELECT productCode, productName, quantityInStock FROM products ORDER BY quantityInStock DESC LIMIT 5
+d. SELECT * FROM orders WHERE (status = "Shipped" OR status = "In Process") AND YEAR(orderDate) = 2005
+d. SELECT * FROM orders WHERE status IN ("Shipped", "In Process") AND YEAR(orderDate) = 2005
+
+Bai3
+a. SELECT customers.customerName, employees.firstName, employees.lastName FROM customers INNER JOIN employees ON customers.salesRepEmployeeNumber = employees.employeeNumber
+b. SELECT products.productCode, products.productName, productlines.textDescription FROM products INNER JOIN productlines ON products.productLine = productlines.productLine = "Classic Cars"
+
+Bai4
+a. SELECT country, COUNT(customerNumber) AS "Number of customers" FROM customers GROUP BY country
