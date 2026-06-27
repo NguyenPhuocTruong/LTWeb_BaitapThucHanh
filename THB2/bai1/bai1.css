@@ -41,8 +41,11 @@ select option {
 table {
     width: 70%;
     margin: auto;
-    height: 60px;
     font-size: 25px;
+}
+
+tr {
+    height: 60px;
 }
 
 table, th, td {
@@ -51,4 +54,8 @@ table, th, td {
 
 th {
     background-color: blanchedalmond;
+}
+
+td {
+    text-align: right;
 }
