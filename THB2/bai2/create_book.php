@@ -48,9 +48,9 @@
         $image_data = file_get_contents($image_file["tmp_name"]) or die("File doesn't exist " . $image_file["tmp_name"]);
         $book_id = $mysqli->insert_id;
 
-        $stm = $mysqli->prepare("INSERT INTO images(book_id, filename, mime_type, file_size, image_data) VALUES(?, ?, ?, ?)");
+        $stm = $mysqli->prepare("INSERT INTO images(book_id, filename, mime_type, file_size, image_data) VALUES(?, ?, ?, ?, ?)");
         $stm->bind_param("issis", $book_id, $image_file["name"], $image_file["type"], $image_file["size"], $image_data);
-        if ($stm->execute()) echo "Uploaded image successfully";
+        if ($stm->execute()) echo "\nUploaded image successfully";
         else echo "Fail to upload image due to: " . $stm->error;
         $stm->close();
     }
