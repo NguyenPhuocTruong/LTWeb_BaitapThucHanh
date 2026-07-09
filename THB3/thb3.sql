@@ -1,4 +1,4 @@
-CREATE TABLE thb3.members (
+CREATE TABLE thb3.thanhvien (
     email VARCHAR(100) PRIMARY KEY,
     hoten VARCHAR(50) NOT NULL collate 'utf8mb4_unicode_ci',
     matkhau VARCHAR(255) NOT NULL collate 'utf8mb4_unicode_ci',

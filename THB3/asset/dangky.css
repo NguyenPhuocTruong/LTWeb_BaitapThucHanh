@@ -5,6 +5,7 @@ form {
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: beige;
 }
 
 div.info_block {
@@ -17,7 +18,7 @@ div.info_block {
     column-gap: 20px;
     /* border: 2px green solid; */
     width: 50%;
-    font-size: 20px;
+    font-size: 19px;
 }
 
 label {
@@ -31,17 +32,17 @@ label {
 input[type="text"],  input[type="email"]{
     grid-area: input;
     width: 80%;
-    font-size: 20px;
+    font-size: 19px;
 }
 
 input[type="password"] {
     width: 60%;
-    font-size: 20px;
+    font-size: 19px;
 }
 
 .select {
     width: fit-content;
-    font-size: 20px;
+    font-size: 19px;
 }
 
 div.radio {

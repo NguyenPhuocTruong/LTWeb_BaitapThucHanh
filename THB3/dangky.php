@@ -10,6 +10,7 @@
     <title>Đăng ký thành viên</title>
 </head>
 <body>
+    <?php include "menu_bar.php" ?>
     <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post" enctype="multipart/form-data">
         <h1 style="color: blue;">THÔNG TIN ĐĂNG KÝ THÀNH VIÊN</h1>
         <div class="info_block">
@@ -38,8 +39,8 @@
         <div class="info_block">
             <label for="gender">Giới tính:</label>
             <div class="radio">
-                <input type="radio" name="gender" value="nam">Nam
-                <input type="radio" name="gender" value="nu" style="margin-left: 20px;">Nữ
+                <input type="radio" name="gender" value="nam" checked>Nam
+                <input type="radio" name="gender" value="nữ" style="margin-left: 20px;">Nữ
             </div>
         </div>
         <div style="margin-top: 10px;">
@@ -60,29 +61,29 @@
         }
 
         if ($_SERVER['REQUEST_METHOD'] == "POST"){
-            if (
-                isset($_POST['name']) and 
-                isset($_POST['email']) and
-                isset($_POST['password']) and 
-                isset($_POST['birth']) and 
-                isset($_POST['gender'])
-            ) {
-                $name = test_input($_POST['name']);
-                $email = filter_var(test_input($_POST['email']), FILTER_SANITIZE_EMAIL); // xoa moi ky tu bat hop phap
-                $hashed_password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-                $birth = (int)$_POST['birth'];
-                $gender = $_POST['gender'];
+            $name = test_input($_POST['name']);
+            $email = filter_var(test_input($_POST['email']), FILTER_SANITIZE_EMAIL); // xoa moi ky tu bat hop phap
+            $hashed_password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            $birth = (int)$_POST['birth'];
+            $gender = $_POST['gender'];
 
-                $stm = $mysqli->prepare("INSERT INTO members (email, hoten, matkhau, namsinh, gioitinh) VALUES(?, ?, ?, ?, ?)");
-                $stm->bind_param("sssis", $email, $name, $hashed_password, $birth, $gender);
-                if ($stm->execute()){
-                    $_SESSION['name'] = $name;
-                    $_SESSION['email'] = $email;
-                    $_SESSION['birth'] = $birth;
-                    $_SESSION['gender'] = $gender;
-                    header("Location: ./thong_tin_ca_nhan.php");
-                } else echo "Lỗi trong lúc lưu trữ dữ liệu: " . $stm->error;
-            } else echo "Vui lòng nhập đầy đủ thông tin";
+            // kiem tra tai khoan da ton tai chua
+            $stm = $mysqli->prepare("SELECT * FROM thanhvien WHERE email = ?");
+            $stm->bind_param("s", $email);
+            if ($stm->execute()){
+                $result = $stm->get_result();
+                if ($result->num_rows == 0){
+                    $stm = $mysqli->prepare("INSERT INTO thanhvien (email, hoten, matkhau, namsinh, gioitinh) VALUES(?, ?, ?, ?, ?)");
+                    $stm->bind_param("sssis", $email, $name, $hashed_password, $birth, $gender);
+                    if ($stm->execute()){
+                        $_SESSION['name'] = $name;
+                        $_SESSION['email'] = $email;
+                        $_SESSION['birth'] = (int)$birth;
+                        $_SESSION['gender'] = $gender;
+                        header("Location: ./thong_tin_ca_nhan.php");
+                    } else echo "Lỗi trong lúc lưu trữ dữ liệu: " . $stm->error;
+                } else echo "Tài khoản đã tồn tại";
+            } else echo "Lỗi trong lúc lưu trữ dữ liệu: " . $stm->error;
         }
     ?>
 </body>

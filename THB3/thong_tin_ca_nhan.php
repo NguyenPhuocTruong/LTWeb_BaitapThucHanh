@@ -10,22 +10,18 @@
     <title>Thông tin cá nhân</title>
 </head>
 <body>
-    <h1>Thông tin cá nhân:</h1><br>
+    <?php include "menu_bar.php" ?>
+    <h1>Thông tin cá nhân</h1><br>
     <div>
         <?php 
-        if (
-            isset($_SESSION['email']) and 
-            isset($_SESSION['name']) and 
-            isset($_SESSION['birth']) and 
-            isset($_SESSION['gender'])
-        ){
+        if (isset($_SESSION['email'])){
             echo "
                 <div class=\"info_block\"><h3 class=\"label\">Họ tên </h3><p class=\"value\">" . $_SESSION['name'] . "</p></div>
                 <div class=\"info_block\"><h3 class=\"label\">Email </h3><p class=\"value\">" . $_SESSION['email'] . "</p></div>
                 <div class=\"info_block\"><h3 class=\"label\">Năm sinh </h3><p class=\"value\">" . $_SESSION['birth'] . "</p></div>
                 <div class=\"info_block\"><h3 class=\"label\">Giới tính </h3><p class=\"value\">" . $_SESSION['gender'] . "</p></div>
             ";
-        }
+        } else header("Location: ./dangnhap.php");
     ?>
     </div>
 </body>
