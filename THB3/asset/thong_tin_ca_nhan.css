@@ -1,0 +1,22 @@
+div.info_block {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-areas:
+        "label value"
+    ;
+    border: 2px black solid;
+}
+
+.label {
+    border-right: 2px black solid;
+    grid-area: label;
+    text-align: left;
+    padding: 10px;
+}
+
+.value {
+    grid-area: value;
+    text-align: left;
+    font-size: 20px;
+    padding: 10px;
+}
