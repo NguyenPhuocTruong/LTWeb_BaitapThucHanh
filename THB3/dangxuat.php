@@ -1,5 +1,12 @@
 <?php session_start() ?>
 
+<?php 
+    if ($_SERVER['REQUEST_METHOD'] == "POST"){
+        if (session_unset() and session_destroy()) header("Location: ./dangnhap.php");
+        else echo "Lỗi trong lúc đăng xuất";
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,12 +27,5 @@
         </form>
         <a href="./thong_tin_ca_nhan.php"><button>KHÔNG</button></a>
     </div>
-
-    <?php 
-        if ($_SERVER['REQUEST_METHOD'] == "POST"){
-            if (session_unset() and session_destroy()) header("Location: ./dangnhap.php");
-            else echo "Lỗi trong lúc đăng xuất";
-        }
-    ?>
 </body>
 </html>
