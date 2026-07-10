@@ -16,6 +16,7 @@
         $data = htmlspecialchars($data);
         return $data;
     }
+    
     if ($_SERVER['REQUEST_METHOD'] == "POST"){
         $name = test_input($_POST['name']);
         $email = filter_var(test_input($_POST['email']), FILTER_SANITIZE_EMAIL); // xoa moi ky tu bat hop phap
