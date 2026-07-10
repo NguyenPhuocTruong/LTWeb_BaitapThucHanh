@@ -5,6 +5,41 @@
     if (!isset($_SESSION['email'])) header("Location: ./dangnhap.php");
 ?>
 
+<?php 
+    require_once("./mysqlConnect.php");
+    $mysqli->select_db("thb3");
+
+    // kiem tra du lieu user nhap vao
+    function test_input(string $data): string{
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+        return $data;
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] == "POST"){
+        if (
+            $_POST['name'] !== $_SESSION['name'] or 
+            $_POST['birth'] !== $_SESSION['birth'] or 
+            $_POST['gender'] !== $_SESSION['gender']
+        ){
+            $email = $_SESSION['email'];
+            $new_name = test_input($_POST['name']);
+            $new_birth = (int)$_POST['birth'];
+            $new_gender = $_POST['gender'];
+            $stm = $mysqli->prepare("UPDATE thanhvien SET hoten = ?, namsinh = ?, gioitinh = ? WHERE email = '$email'");
+            $stm->bind_param("sis", $new_name, $new_birth, $new_gender);
+            if ($stm->execute()) {
+                $_SESSION['name'] = $new_name;
+                $_SESSION['birth'] = $new_birth;
+                $_SESSION['gender'] = $new_gender;
+                header("Location: ./thong_tin_ca_nhan.php");
+            }
+            else echo "Lỗi trong lúc thay đổi dữ liệu: " . $stm->error;
+        } else echo "Không có gì để thay đổi !";
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,43 +81,5 @@
             <input type="submit" value="Xác Nhận Thay Đổi"> <input type="reset" value="Hủy">
         </div>
     </form>
-    <?php 
-        require_once("./mysqlConnect.php");
-        $mysqli->select_db("thb3");
-
-        // kiem tra du lieu user nhap vao
-        function test_input(string $data): string{
-            $data = trim($data);
-            $data = stripslashes($data);
-            $data = htmlspecialchars($data);
-            return $data;
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] == "POST"){
-            if (
-                $_POST['name'] !== $_SESSION['name'] or 
-                $_POST['birth'] !== $_SESSION['birth'] or 
-                $_POST['gender'] !== $_SESSION['gender']
-            ){
-                $email = $_SESSION['email'];
-                $new_name = test_input($_POST['name']);
-                $new_birth = (int)$_POST['birth'];
-                $new_gender = $_POST['gender'];
-                $stm = $mysqli->prepare("UPDATE thanhvien SET hoten = ?, namsinh = ?, gioitinh = ? WHERE email = '$email'");
-                $stm->bind_param("sis", $new_name, $new_birth, $new_gender);
-                if ($stm->execute()) {
-                    $_SESSION['name'] = $new_name;
-                    $_SESSION['birth'] = $new_birth;
-                    $_SESSION['gender'] = $new_gender;
-                    header("Location: ./thong_tin_ca_nhan.php");
-                }
-                else echo "Lỗi trong lúc thay đổi dữ liệu: " . $stm->error;
-            } else echo "
-                <script>
-                    console.log(\"Không có gì để thay đổi !\");
-                </script>
-            ";
-        }
-    ?>
 </body>
 </html>
