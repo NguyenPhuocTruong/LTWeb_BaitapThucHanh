@@ -8,17 +8,17 @@
     <title>Đăng ký thành viên</title>
 </head>
 <body>
-    <?php include "menu_bar.php" ?>
+    <%- include("partials/menu_bar") %>
     <form action="/dangky" method="post" enctype="multipart/form-data">
         <h1 style="color: blue;">THÔNG TIN ĐĂNG KÝ THÀNH VIÊN</h1>
         <div class="info_block">
-            <label for="name">Họ tên:</label><input type="text" name="name" required>
+            <label for="name">Họ tên:</label><input type="text" name="name" required value="<%= name %>">
         </div>
         <div class="info_block">
-            <label for="email">Địa chỉ email:</label><input type="email" name="email" required>
+            <label for="email">Địa chỉ email:</label><input type="email" name="email" required value="<%= email %>">
         </div>
         <div class="info_block">
-            <label for="password">Mật khẩu:</label><input type="password" name="password" required>
+            <label for="password">Mật khẩu:</label><input type="password" name="password" required value="<%= password %>">
         </div>
         <div class="info_block">
             <label for="birth">Năm sinh:</label>
@@ -27,17 +27,25 @@
                     // get current year
                     var curr_year = (new Date()).getFullYear();
                 %>
-                <% for( let i = 1910; i < curr_year; i++ ) { %>
-                    <option value="<%= i %>"><%= i %></option>
+                <% for( let i = 1910; i <= curr_year; i++ ) { %>
+                    <% if (i == birth) { %>
+                        <option value="<%= i %>" selected><%= i %></option>
+                    <% } else { %>
+                        <option value="<%= i %>"><%= i %></option>
+                    <% } %>
                 <% } %>
-                <option value="<%= curr_year %>" selected><%= curr_year %></option>
             </select>
         </div>
         <div class="info_block">
             <label for="gender">Giới tính:</label>
             <div class="radio">
-                <input type="radio" name="gender" value="nam" checked>Nam
-                <input type="radio" name="gender" value="nữ" style="margin-left: 20px;">Nữ
+                <% if (gender == "nam" || gender == "") { %>
+                    <input type="radio" name="gender" value="nam" checked>Nam
+                    <input type="radio" name="gender" value="nữ" style="margin-left: 20px;">Nữ
+                <% } else { %>
+                    <input type="radio" name="gender" value="nam">Nam
+                    <input type="radio" name="gender" value="nữ" style="margin-left: 20px;" checked>Nữ
+                <% } %>
             </div>
         </div>
         <div style="margin-top: 10px;">

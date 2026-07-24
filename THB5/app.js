@@ -23,49 +23,61 @@ const bc = require("bcrypt");
 // session
 const session = require("express-session");
 const e = require("express");
+const { render } = require("ejs");
 app.use(session({
     secret: "truongadmin",
     resave: false,
     saveUninitialized: true
 }));
 
+app.get("/dangky", (req, res) => {
+    // check if user has logged in or not
+    if (req.session.authenticated) {
+        render("thong_tin_ca_nhan", )
+    }
+})
+
 app.post("/dangky", (req, res) => {
     // get the email then check if this email is existed or not
     const email = req.body.email;
+    const name = req.body.name;
+    const password = req.body.password;
+    const birth = req.body.birth;
+    const gender = req.body.gender;
     var exist = false;
     var sql = "SELECT * FROM thanhvien WHERE email = ?";
     db.query(sql, [email], (err, result, fields) => {
         if (err) throw err;
-        if (result.length > 0) res.render("dangky", {exist: true});
+        if (result.length > 0) res.render("dangky", {authenticated: false, exist: true, email: email, name: name, password: password, birth: birth, gender: gender});
         else {
             // insert information of user into db
-            const name = req.body.name;
-            const password = req.body.password;
-            const birth = req.body.birth;
-            const gender = req.body.gender;
-            sql = "INSERT INTO thanhvien (email, hoten, matkhau, namsinh, gioitinh) VALUES (?, ?, ?, ?, ?)";
-            db.query(sql, [email, name, password, birth, gender], (err, result) => {
+            bc.hash(password, 10, (err, hash) => {
                 if (err) throw err;
-                // store user information to session
-                req.session.email = email;
-                req.session.name = name;
-                req.session.birth = birth;
-                req.session.gender = gender;
-                req.session.authenticated = true;
+                sql = "INSERT INTO thanhvien (email, hoten, matkhau, namsinh, gioitinh) VALUES (?, ?, ?, ?, ?)";
+                db.query(sql, [email, name, hash, birth, gender], (err, result) => {
+                    if (err) throw err;
+                    // store user information to session
+                    req.session.email = email;
+                    req.session.name = name;
+                    req.session.birth = birth;
+                    req.session.gender = gender;
+                    req.session.authenticated = true;
 
-                res.render("thong_tin_ca_nhan", {
-                    name: name,
-                    email: email,
-                    birth: birth,
-                    gender: gender
-                });
+                    res.render("thong_tin_ca_nhan", {
+                        authenticated: true,
+                        name: name,
+                        email: email,
+                        birth: birth,
+                        gender: gender
+                    });
+                }); 
             });
         }
     });
 });
 
 app.get("/", (req, res) => {
-    if (!req.session.authenticated) res.render("dangky", {exist: false}); // if not logged in then navigate to dangky page
+    if (!req.session.authenticated) res.render("dangky", {authenticated: false, exist: false, email: "", name: "", password: "", birth: 2026, gender: ""}); // if not logged in then navigate to dangky page
     else res.render("thong_tin_ca_nhan", {
         name: app.session.name, 
         email: app.session.email, 
