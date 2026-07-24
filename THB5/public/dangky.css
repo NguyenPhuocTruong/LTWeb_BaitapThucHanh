@@ -1,0 +1,51 @@
+form {
+    padding: 10px;
+    border: 2px black solid;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: beige;
+}
+
+div.info_block {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-areas:
+        "label input"
+    ;
+    column-gap: 20px;
+    /* border: 2px green solid; */
+    width: 50%;
+    font-size: 19px;
+}
+
+label {
+    grid-area: label;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: end;
+}
+
+input[type="text"],  input[type="email"]{
+    grid-area: input;
+    width: 80%;
+    font-size: 19px;
+}
+
+input[type="password"] {
+    width: 60%;
+    font-size: 19px;
+}
+
+.select {
+    width: fit-content;
+    font-size: 19px;
+}
+
+div.radio {
+    display: inline;
+    text-align: left;
+}

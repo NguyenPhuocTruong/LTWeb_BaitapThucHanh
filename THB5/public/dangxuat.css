@@ -1,0 +1,13 @@
+form {
+    border: none;
+}
+
+div.logout {
+    border: 2px black solid;
+    background-color: beige;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60%;
+    padding: 10px;
+}
